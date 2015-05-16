@@ -1,0 +1,92 @@
+﻿<style>
+    .editable-text {
+        position: relative;
+    }
+    .editable-text span.normal div.click-box {
+        display: none;
+    }
+    .editable-text span.normal:hover div.click-box {
+        display: block;
+        background: #fff;
+        padding-left: 4px;
+        padding-bottom: 4px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        cursor: pointer;
+        height: 20px;
+        border: 1px solid #e0e0e0;
+    }
+</style>
+<div class="box ng-scope">
+    <div>
+        <div class="heading primary">
+            Testa anrop
+            {{testTest}}
+        </div>
+        <div class="content">
+            <edit method="get" target="user" postdata="{UserId: 3}" datamodel="userModel">
+                <table>
+                    <tr>
+                        <td width="150">FirstName</td>
+                        <td>
+                            <editabletext edit-mode="false" datamodel="userModel" text="userModel.FirstName"></editabletext>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="150">LastName</td>
+                        <td>
+                            <editabletext edit-mode="false" datamodel="userModel" text="userModel.LastName"></editabletext>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="150">Description</td>
+                        <td>
+                            <editabletext edit-mode="false" datamodel="userModel" text="userModel.Email"></editabletext>
+                        </td>
+                    </tr>
+                </table>
+            </edit>
+        </div>
+    </div>
+</div>
+<div class="box ng-scope">
+    <div>
+        <div class="heading primary">
+            Testa anrop
+            {{testTest}}
+        </div>
+        <div class="content">
+            <edit method="get" target="user" postdata="{UserId: 3}" datamodel="userModel">
+                <table>
+                    <tr>
+                        <td width="150">FirstName</td>
+                        <td>
+                            <editabletext edit-mode="false" datamodel="userModel" text="userModel.FirstName"></editabletext>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="150">LastName</td>
+                        <td>
+                            <editabletext edit-mode="false" datamodel="userModel" text="userModel.LastName"></editabletext>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="150">Description</td>
+                        <td>
+                            <editabletext edit-mode="false" datamodel="userModel" text="userModel.Email"></editabletext>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="150">Dropdown</td>
+                        <td>
+                            <dropdown value="5" entity="TaskType" show-inactivated="true"></dropdown>
+                        </td>
+                    </tr>
+                </table>
+            </edit>
+        </div>
+    </div>
+</div>
+</div>

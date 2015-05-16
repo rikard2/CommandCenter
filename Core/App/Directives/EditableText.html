@@ -1,0 +1,7 @@
+﻿<div class="editable-text" style="margin-bottom: 3px;">
+    <span ng-show="!datamodel.$isEditMode" class="normal">
+        <div class="click-box" ng-click="setEdit(true)"><i class="fa fa-pencil-square-o"></i></div>
+        {{ text }}
+    </span>
+    <input type="text" style="padding:3px;width:200px;" ng-show="datamodel.$isEditMode" value="X" class="edit" ng-model="text" ng-blur="setEdit(false)" />
+</div>
