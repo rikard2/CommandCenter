@@ -104,7 +104,7 @@ namespace Core.Controllers
                 foreach (var key in d.Keys)
                 {
                     b = false;
-                    if (d[key] != null && key.ToLower() == "datetimeinactivated" || !showInactivated)
+                    if (d[key] != null && key.ToLower() == "datetimeinactivated" )
                     {
                         
                     }

@@ -1,4 +1,4 @@
-﻿var coreGuiApp = angular.module('coreGuiApp', ['ngRoute']);
+﻿var coreGuiApp = angular.module('coreGuiApp', ['ngRoute', 'ui.bootstrap']);
 coreGuiApp.config(['$routeProvider',
   function ($routeProvider) {
       $routeProvider.
@@ -21,12 +21,16 @@ coreGuiApp.controller('editableTestController', function ($scope, $http) {
         test: 132,
         description: 'hello world'
     };
-
+    $scope.selected = undefined;
+    $scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+    console.log('states', $scope.states);
     $scope.userModel = { };
 });
 coreGuiApp.controller('testToolController', function ($scope, $http) {
     
-    $scope.postUrl = 'http://localhost:88/api/StoredProcedure/get/person';
+    // Any function re
+
+    $scope.postUrl = 'http://localhost:88/api/service/get/' + scope.entity;
     $scope.params = [{
         name: null,
         value: null

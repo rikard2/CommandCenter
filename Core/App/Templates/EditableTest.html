@@ -2,90 +2,127 @@
     .editable-text {
         position: relative;
     }
-    .editable-text span.normal div.click-box {
-        display: none;
+
+        .editable-text span.normal div.click-box {
+            display: none;
+        }
+
+        .editable-text span.normal:hover div.click-box {
+            display: block;
+            background: #fff;
+            padding-left: 4px;
+            padding-bottom: 4px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 20px;
+            cursor: pointer;
+            height: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+    .tab {
+        padding: 7px 10px;
     }
-    .editable-text span.normal:hover div.click-box {
-        display: block;
-        background: #fff;
-        padding-left: 4px;
-        padding-bottom: 4px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 20px;
-        cursor: pointer;
-        height: 20px;
-        border: 1px solid #e0e0e0;
+
+        .tab:hover {
+            background: #BBDEFB;
+            cursor: pointer;
+        }
+
+    .box .box-header {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 7px;
+        padding-bottom: 7px;
+        background: #f9f9f9;
+        border-bottom: 1px solid #e0e0e0;
+        font-weight: bold;
     }
+
+    .btn-nav {
+        box-shadow: none;
+        font-weight: bold;
+        padding: 0px 7px;
+    }
+
+    .form-control {
+        box-shadow: none;
+        -webkit-box-shadow: none;
+    }
+
+        .form-control:focus {
+            border-color: #66afe9;
+            outline: 0;
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 1px rgba(3, 169, 244, 1);
+        }
+
+
 </style>
-<div class="box ng-scope">
-    <div>
-        <div class="heading primary">
-            Testa anrop
-            {{testTest}}
-        </div>
-        <div class="content">
-            <edit method="get" target="user" postdata="{UserId: 3}" datamodel="userModel">
-                <table>
-                    <tr>
-                        <td width="150">FirstName</td>
-                        <td>
-                            <editabletext edit-mode="false" datamodel="userModel" text="userModel.FirstName"></editabletext>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="150">LastName</td>
-                        <td>
-                            <editabletext edit-mode="false" datamodel="userModel" text="userModel.LastName"></editabletext>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="150">Description</td>
-                        <td>
-                            <editabletext edit-mode="false" datamodel="userModel" text="userModel.Email"></editabletext>
-                        </td>
-                    </tr>
-                </table>
-            </edit>
-        </div>
+<div class="col-md-3">
+    <div class="box">
+        <div class="box-header">Profile</div>
+        <div class="tab">Personal settings</div>
+        <div class="tab">Boom!</div>
     </div>
 </div>
-<div class="box ng-scope">
-    <div>
-        <div class="heading primary">
-            Testa anrop
-            {{testTest}}
-        </div>
-        <div class="content">
-            <edit method="get" target="user" postdata="{UserId: 3}" datamodel="userModel">
-                <table>
-                    <tr>
-                        <td width="150">FirstName</td>
-                        <td>
-                            <editabletext edit-mode="false" datamodel="userModel" text="userModel.FirstName"></editabletext>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="150">LastName</td>
-                        <td>
-                            <editabletext edit-mode="false" datamodel="userModel" text="userModel.LastName"></editabletext>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="150">Description</td>
-                        <td>
-                            <editabletext edit-mode="false" datamodel="userModel" text="userModel.Email"></editabletext>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="150">Dropdown</td>
-                        <td>
-                            <dropdown value="5" entity="TaskType" show-inactivated="true"></dropdown>
-                        </td>
-                    </tr>
-                </table>
-            </edit>
+<div class="col-md-9">
+    <div class="box ng-scope" style="padding:20px;">
+        
+    </div>
+    <h3 style="color: #F44336;margin: 0;margin-bottom: 15px;">My profile</h3>
+    <div class="box ng-scope">
+
+        <div>
+            <div class="box-header">
+                <div class="pull-left">
+                    Buy some milk!
+                </div>
+                <div class="pull-right">
+                    <div class="btn btn-round-sm ng-scope btn-nav" bs-tooltip="" title="Upload media"><i class="fa fa-pencil"></i></div>
+                    <div class="btn btn-round-sm ng-scope btn-nav" bs-tooltip="" title="Upload media"><i class="fa fa-trash-o"></i></div>
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="content">
+                <edit entity="UserProfile" postdata="{}">
+                    <photo property="Photo" max-height="100"></photo>
+                    <table>
+                        <tr>
+                            <td width="150">FirstName</td>
+                            <td>
+                                <choose>
+                                    Hello world: {{ hello }}
+                                </choose>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="150">FirstName</td>
+                            <td>
+                                <editabletext property="FirstName"></editabletext>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="150">LastName</td>
+                            <td>
+                                <editabletext property="LastName"></editabletext>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="150">Description</td>
+                            <td>
+                                <editabletext property="Email"></editabletext>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Typeahead</td>
+                            <td>
+                                <input type="text" ng-model="selected" typeahead="state for state in states | limitTo: 5" filter="" class="form-control ng-valid ng-dirty ng-valid-parse ng-touched" aria-autocomplete="list" aria-expanded="false" aria-owns="typeahead-63-2538">
+                            </td>
+                        </tr>
+                    </table>
+                </edit>
+            </div>
         </div>
     </div>
 </div>

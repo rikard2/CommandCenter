@@ -1,17 +1,15 @@
 ﻿<div ng-if="loading">Laddar...</div>
-<div class="alert alert-success" ng-class="isSuccess ? 'alert-success' : 'alert-danger'" ng-if="isSaved">
+<div class="alert alert-success" ng-class="(isSuccess != null) ? 'alert-success' : 'alert-danger'" ng-if="isSuccess">
     {{ isSuccess ? 'Raden sparades' : errorMessage }}
 </div>
-<div ng-if="!loading">
-    <div ng-if="!datamodel.$isEditMode">
-        <button class="btn btn-default btn-xs" ng-click="setEditMode(true)"> <i class="fa fa-pencil fa-fw"></i></button>
-        <br /><br />
+<div ng-if="!loading" style="position: relative">
+    <div ng-if="!isEditMode">
+        <button class="btn btn-default btn-xs" ng-click="setEditMode(true)" style="right:0;position:absolute;top:0;border:none;box-shadow: none"> <i class="fa fa-pencil fa-fw"></i></button>
     </div>
     <ng-transclude></ng-transclude>
-
-    <div style="margin-top:15px;">
-        <button class="btn btn-danger btn-xs" ng-click="setEditMode(false)" ng-if="datamodel.$isEditMode"><i class="fa fa-times fa-fw"></i> Avbryt</button>
-        <button class="btn btn-success btn-xs" ng-click="submit()" ng-if="datamodel.$isEditMode"><i class="fa fa-floppy-o"></i> Spara</button>
+    <div style="margin-top:15px;" ng-if="isEditMode">
+        <button class="btn btn-danger btn-xs" ng-click="setEditMode(false)"><i class="fa fa-times fa-fw"></i> Avbryt</button>
+        <button class="btn btn-success btn-xs" ng-click="submit()"><i class="fa fa-floppy-o"></i> Spara</button>
     </div>
 
 </div>

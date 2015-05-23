@@ -1,0 +1,58 @@
+﻿<style>
+    .choose-panel {
+        border: 1px solid #e0e0e0;
+        box-shadow: 1px 1px rgba(0, 0, 0, 0);
+        padding: 5px;
+        position: absolute;
+        width: 100px;
+        background: #FFF;
+        z-index: 999;
+        width: 100%;
+    }
+    .choose-panel ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .choose-panel ul li:first-child {
+        margin-top: 5px;
+    }
+    .choose-panel ul li, .choose-panel-item {
+        display: block;
+        margin:0;
+        padding: 5px;
+        height: 30px;
+    }
+
+    .choose-panel ul li:hover {
+        background: #BBDEFB;
+        cursor: pointer;
+    }
+
+    .choose-panel-hover {
+        background: #BBDEFB;
+        cursor: pointer;
+    }
+
+    .choose-input {
+        width: 100%;
+        border: 1px solid #e0e0e0;
+        padding: 3px;
+    }
+</style>
+<div>
+    <div class="choose-selected-panel" ng-if="isSelected" ng-click="select()">
+        <div class="choose-panel-hover choose-panel-item" ng-transclude>
+        </div>
+    </div>
+    <div style="position:relative; height: 30px;width:100%;" ng-if="!isSelected">
+        <div class="choose-panel">
+            <input type="text" class="choose-input" ng-blur="inputBlur()" />
+            <ul>
+                <li ng-repeat="item in items">
+                    <ng-transclude></ng-transclude>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
