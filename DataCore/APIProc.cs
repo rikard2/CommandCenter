@@ -29,7 +29,7 @@ namespace DataCore
             args2.Add(new ProcArg {Name = "_UserId", Value = 1});
             args2.Add(new ProcArg {Name = "_ErrorMessage", Value = null});
 
-            _proc = new Proc("API", name, args2);
+            _proc = new Proc("APIDEBUG", name, args2);
         }
 
         public APIProcResult ExecuteDT()

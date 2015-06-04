@@ -61,6 +61,21 @@
     };
 });
 
+coreGuiApp.directive('editrow', function ($compile) {
+    return {
+        require: '^edit',
+        restrict: 'E',
+        scope: {
+            'label': '@'  
+        },
+        transclude: true,
+        template: '<div class="editrow">'
+            + '<div class="editrow-label">{{label}}</div>'
+            + '<div class="editrow-content" ng-transclude></div>'
+            + '<div style="clear:both"></div></div>'
+    };
+});
+
 coreGuiApp.directive('editabletext', function ($compile) {
     return {
         require: '^edit',

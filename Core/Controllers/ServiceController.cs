@@ -10,6 +10,7 @@ using Core.Models;
 using System.Collections.Generic;
 using System;
 using Core.Helpers;
+using Npgsql;
 
 
 namespace Core.Controllers
@@ -80,6 +81,35 @@ namespace Core.Controllers
                 ErrorMessage = apiProcResult.ErrorMessage,
                 Success = apiProcResult.IsSuccess
             };
+        }
+
+        [HttpPost]
+        public string abo()
+        {
+            string connstring = String.Format("Server={0};Port={1};" +
+                    "User Id={2};Password={3};Database={4};",
+                    "core1337.ckpqsf4ulmrw.eu-west-1.rds.amazonaws.com", 5432, "core1337",
+                    "tomte123", "core");
+            // Making connection with Npgsql provider
+            NpgsqlConnection conn = new NpgsqlConnection(connstring);
+            conn.Open();
+
+            conn.Notice += conn_Notice;
+            conn.Notification += conn_Notification;
+
+            conn.Close();
+
+            return "hello";
+        }
+
+        void conn_Notification(object sender, NpgsqlNotificationEventArgs e)
+        {
+            
+        }
+
+        void conn_Notice(object sender, NpgsqlNoticeEventArgs e)
+        {
+            
         }
 
         [HttpPost]

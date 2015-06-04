@@ -10,10 +10,12 @@ using DataCore.DataTypes;
 using DataCore.Models;
 using DataCore.Helpers;
 using Newtonsoft.Json;
+using Npgsql;
 namespace Core.Controllers
 {
     public class StoredProcedureController : ApiController
     {
+        
         /*
         [HttpPost]
         public ResultModel Search(string schema, string proc)
