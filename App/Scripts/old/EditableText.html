@@ -1,0 +1,6 @@
+﻿<div class="editable-text" class="form-group" style="margin-bottom: 3px;">
+    <span ng-show="!isEditMode" class="normal">
+        {{ model[property] }}
+    </span>
+    <input type="text" style="width:350px;" ng-show="isEditMode" value="X" class="edit form-control" ng-model="model[property]" ng-blur="setEdit(false)" />
+</div>

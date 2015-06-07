@@ -1,0 +1,7 @@
+﻿<div ng-show="isEditMode">
+    <div style="width:100px;height:100px;background:#efefef;border-style:dashed;border-width:1px;border-color:#aaa;position:relative;">
+        <div style="position:absolute;top:40px;left:15px;font-weight:bold;">Drag here</div>
+</div>
+</div>
+   <img ng-show="!isEditMode" src="data:image/gif;base64,{{ model[property] }}" style="max-width: {{maxWidth}}px;max-height: {{maxHeight}}px;" />
+<div style="height:25px"></div>
