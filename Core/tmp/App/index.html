@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="en" ng-app="coreApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+
+    <script src="/vendor/js/jquery-1.11.2.min.js"></script>
+    <link href="/vendor/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/vendor/js/bootstrap.min.js"></script>
+    
+    
+
+    <script src="/vendor/js/jquery-1.11.2.min.js"></script>
+    <script src="/vendor/js/angular.js"></script>
+    <script src="/vendor/js/angular-route.min.js"></script>
+    <script src="Scripts/ui-bootstrap-tpls-0.13.0.min.js"></script>
+    <script src="/App/App.js"></script>
+    <script src="/App/Services/HttpService.js"></script>
+    <script src="/App/Directives/Directives.js"></script>
+    <script src="/App/Directives/Card.js"></script>
+    <script src="/App/Directives/Edit.js"></script>
+    <script src="/App/Directives/Grid.js"></script>
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="Styles/site.css">
+    <!--<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>-->
+    <link href='http://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' href='typicons/typicons.min.css' />
+    <link rel='stylesheet' href='font.css' />
+    <style>
+        @font-face {
+          font-family: 'typicons';
+          src: url("typicons/typicons.eot");
+          src: url("typicons/typicons.eot?#iefix") format('embedded-opentype'),
+               url("typicons/typicons.woff") format('woff'),
+               url("typicons/typicons.ttf") format('truetype'),
+               url("typicons/typicons.svg#typicons") format('svg');
+          font-weight: normal;
+          font-style: normal;
+        }
+    </style>
+</head>
+<body>
+    <div class="custom-navbar">
+        <div class="container">
+            
+            <div class="logo">
+                LearningWell
+            </div>
+            <div class="search-box">
+            </div>
+            <div class="pull-right" style="color:#fff;">
+                <xicon icon="user" size="small"></xicon>&nbsp;&nbsp;Jeff Brown <xicon icon="down" size="small" />
+            </div>
+        </div>
+    </div>
+    
+    <div class="container" style="margin-top:30px;">
+        <div class="starter-template">
+            <div class="row">
+                <div ng-view class="view-animate"></div>
+            </div>
+        </div>
+    </div>
+    <style>
+        .debug {
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            height:250px;
+            padding: 5px;
+        }
+        
+        .debug .left {
+            float: left;
+            width:650px;
+            font-size: 13px;
+        }
+        
+        .debug .clickable:hover {
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .debug .right {
+            float: left;
+            width: 600px;
+            white-space: pre-wrap;
+            margin-left:10px;
+            overflow-y: scroll;
+            height: 240px;
+            background: #efefef;
+            padding: 10px;
+            font-family: "courier new";
+            font-size: 13px;
+        }
+    </style>
+    <div class="navbar navbar-fixed-bottom debug" ng-controller="debugController">
+        <div class="left">
+            <div class="log-row" ng-repeat="l in logRows">
+                > {{l.date | date:'HH:mm:ss:sss'}}: {{l.name}} ({{l.status}}, <span class="clickable" ng-click="selectLogRow(l.request)">request</span>, <span class="clickable" ng-click="selectLogRow(l.response)">response</span>, <span class="clickable" ng-click="selectLogRow(l.model)">model</span>) 
+            </div>
+        </div>
+        <div class="right">{{activeLogRow | json}}</div>
+    </div>
+</body>
+</html>

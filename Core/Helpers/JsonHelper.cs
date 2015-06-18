@@ -57,13 +57,18 @@ namespace Core.Helpers
             var json = ObjectFromJsonRequest();
             foreach (string key in json.Keys)
             {
+                object val = json[key];
+
                 if (key.Substring(0, 1) == "_")
                     continue;
+
+                if (val.ToString().Trim().Length == 0)
+                    val = null;
 
                 args.Add(new ProcArg
                 {
                     Name = key,
-                    Value = json[key]
+                    Value = val
                 });
             }
 

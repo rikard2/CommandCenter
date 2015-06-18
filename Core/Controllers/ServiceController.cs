@@ -48,17 +48,21 @@ namespace Core.Controllers
         }
 
         [HttpPost]
-        public GetResultModel Set(string entity)
+        public SetResultModel Set(string entity)
         {
             var json = JsonHelper.ObjectFromJsonRequest();
             List<ProcArg> args = new List<ProcArg>();
 
             foreach (string key in json.Keys)
             {
+                object val = json[key];
+                if (val.ToString().Trim().Length == 0)
+                    val = null;
+
                 args.Add(new ProcArg
                 {
                     Name = key,
-                    Value = json[key]
+                    Value = val
                 });
             }
             var apiProc = new APIProc(string.Format("{0}_Set", entity), args);
@@ -76,11 +80,22 @@ namespace Core.Controllers
                 }
             }
 
-            return new GetResultModel()
+            var resultModel = new SetResultModel()
             {
                 ErrorMessage = apiProcResult.ErrorMessage,
-                Success = apiProcResult.IsSuccess
+                Success = apiProcResult.IsSuccess,
+                Merge = new Dictionary<string,object>()
             };
+
+            if (apiProcResult.IsSuccess)
+            {
+                foreach (var o in apiProcResult.OutputParameters)
+                {
+                    resultModel.Merge.Add(o.Key, o.Value);
+                }
+            }
+
+            return resultModel;
         }
 
         [HttpPost]

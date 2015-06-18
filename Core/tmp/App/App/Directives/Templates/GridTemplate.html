@@ -1,0 +1,54 @@
+<div>
+	<table class="tbl">
+        <thead>
+            <tr class="first header">
+                <td style="width:25px !important;">
+                    <checkbox></checkbox>
+                </td>
+                <td style="width:75px !important;">
+                    
+                </td>
+                <td ng-repeat="c in columns">
+                    <div style="float:left;">
+                        <a href="javascript:void(0)" ng-click="sortClick(c)" ng-class="{bold: currentSortColumn === c}">
+                            {{c.label}}
+                        </a>
+                    </div>
+                    <div style="float:left;margin-left:5px;margin-top:-2px;width:5px;">
+                        <i ng-show="currentSortColumn === c" class="fa fa-chevron-{{currentSortColumn.sortOrderFlag == '-' ? 'down' : 'up'}}" style="font-size:9px;"></i>
+                    </div>
+                    <div style="clear:both"></div>
+                </td>
+            </tr>
+        </thead>
+		 <tbody
+             ng-repeat="m in models | orderBy: currentSortColumn.sortOrderFlag + currentSortColumn.attribute"
+             ng-init="opened = false">
+             
+            <tr ng-class="{odd: $index % 2 == 0, checked: m._isChecked}">
+                <td>
+                    <div>
+                        <input type="checkbox" ng-model="m._isChecked" />
+                    </div>
+                </td>
+                <td>
+                    <div ng-repeat="dd in drilldowns">
+                        <div style="float:left;margin-right:10px;">
+                            <subtle-button icon="(m._openedDrilldown === dd) ? 'up' : dd.icon" ng-click="onDrilldownLinkClick($event, dd, m)"></subtle-button>
+                        </div>
+                    </div>
+                    <div ng-repeat="a in actions">
+                        <div style="float:left;">
+                            <subtle-button icon="a.icon" ng-click="onActionClick(a, m)"></subtle-button>
+                        </div>
+                    </div>
+                </td>
+                <td ng-repeat="c in columns">{{m[c.attribute]}}</td>
+            </tr>
+            <tr>
+                <td colspan="500" style="display:none;">???</td>
+            </tr>
+            <ng-transclude />
+        </tbody>
+	</table>
+</div>

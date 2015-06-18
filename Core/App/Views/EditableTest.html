@@ -1,0 +1,57 @@
+﻿<div class="col-md-3">
+    <card>
+        <card-header title="Meny"></card-header>
+        <card-nav-link title="Skapa företag"></card-nav-link>
+    </card>
+    <card>
+        <card-header title="Parks & Resorts Scandinavia"></card-header>
+        <card-nav-sub-link title="Skapa företag"></card-nav-link>
+        <card-nav-sub-link title="Skapa företag"></card-nav-link>
+        <card-nav-sub-link title="Skapa företag"></card-nav-link>
+        <card-nav-sub-link title="Skapa företag"></card-nav-link>
+        <card-nav-sub-link title="Skapa företag"></card-nav-link>
+        <card-nav-sub-link title="Skapa företag"></card-nav-link>
+    </card>
+    
+</div>
+<div class="col-md-9">
+
+    <h3 style="color: #F44336;margin: 0;margin-bottom: 15px;">My profile</h3>
+    <card>
+        <edit params="{PersonId:15}">
+            <card-header title="My Profile">
+                <card-header-link edit-action type="edit" ng-show="!state.isEditMode">!!!</card-header-link>
+            </card-header>
+            <display-mode>
+                <card-content>
+                    FirstName: {{model.FirstName}}<br/>
+                    LastName: {{model.LastName}}
+                </card-content>
+            </display-mode>
+            <edit-mode>            
+                <card-content>
+                    <edit-textbox attribute="FirstName" label="First name"></edit-textbox>
+                    <edit-textbox attribute="LastName" label="Last name"></edit-textbox>
+                </card-content>
+                <card-footer ng-show="state.isEditMode">
+                    <card-button edit-action type="save">Save</card-button>
+                    <card-button edit-action type="cancel">Cancel</card-button>
+                </card-footer>
+            </edit-mode>
+        </edit>
+    </card>
+    <card>
+        <card-header title="Deltagare"></card-header>
+        <grid-view edit>
+            <grid-column attribute="FirstName" label="First Name"></grid-column>
+            <grid-column attribute="LastName" label="Last Name"></grid-column>
+            <grid-column attribute="Age" label="Age"></grid-column>
+            
+            <grid-link target="edit" icon="pencil"></grid-link>
+            <grid-link target="edit" icon="bar-chart"></grid-link>
+            <grid-drilldown target="edit">
+                <pre>{{model | json}}</pre>
+            </grid-drilldown>
+        </grid-view>
+    </card>
+</div>

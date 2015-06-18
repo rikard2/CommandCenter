@@ -46,5 +46,7 @@ namespace Core.Models
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string ErrorMessage { get; set; }
+
+        public Dictionary<string, object> Merge { get; set; }
     }
 }

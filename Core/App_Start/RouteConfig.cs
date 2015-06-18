@@ -14,10 +14,11 @@ namespace Core
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                name: "WebAPI",
+                url: "service/{action}/{id}",
+                defaults: new { controller = "service", action = "Index", id = UrlParameter.Optional }
             );
+            routes.MapPageRoute("Default", "{*anything}", "~/index.html");
         }
     }
 }
