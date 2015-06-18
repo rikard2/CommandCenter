@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configurations", "Configura
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCore", "DataCore\DataCore.csproj", "{57057A70-85F8-4951-AE6E-000719902DD1}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CoreDb", "CoreDb\CoreDb.sqlproj", "{DCEDFE12-D595-4914-9E62-1861FC04B396}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,12 @@ Global
 		{57057A70-85F8-4951-AE6E-000719902DD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57057A70-85F8-4951-AE6E-000719902DD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57057A70-85F8-4951-AE6E-000719902DD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCEDFE12-D595-4914-9E62-1861FC04B396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCEDFE12-D595-4914-9E62-1861FC04B396}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCEDFE12-D595-4914-9E62-1861FC04B396}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{DCEDFE12-D595-4914-9E62-1861FC04B396}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCEDFE12-D595-4914-9E62-1861FC04B396}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCEDFE12-D595-4914-9E62-1861FC04B396}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
