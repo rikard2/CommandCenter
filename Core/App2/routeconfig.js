@@ -1,5 +1,0 @@
-var routes = {
-	add: function() {
-		
-	}	
-};
