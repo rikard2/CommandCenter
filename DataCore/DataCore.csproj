@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIProcConnection.cs" />
     <Compile Include="APIProcResult.cs" />
     <Compile Include="DataTypes\Resultset.cs" />
     <Compile Include="DataTypes\XInteger.cs" />

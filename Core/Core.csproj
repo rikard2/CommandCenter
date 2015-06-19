@@ -228,7 +228,7 @@
     <Content Include="App\routeconfig.js" />
     <Content Include="App\Services\HttpService.js" />
     <Content Include="App\Views\EditableTest.html" />
-    <Content Include="App\Views\PostTool.html" />
+    <Content Include="App\Views\TestTool.html" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="favicon.ico" />
     <Content Include="static\font.css" />

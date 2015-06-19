@@ -24,7 +24,8 @@ coreApp.directive('edit', function($http) {
 			editMode: '=',
 			bindModel: '=',
 			scope: '@',
-			params: '='
+			params: '=',
+            entity: '@'
 		},
 		controller: 'EditController'
 	};
@@ -48,9 +49,9 @@ coreApp.controller('EditController', function($scope, $element, httpService, $ro
 	
 	if ($scope.scope === 'local')
 	{
-		httpService.get('Person', $scope.params,
-			function(model) {
-				$scope.model = angular.extend($scope.model, model);
+		httpService.get($scope.entity, $scope.params,
+			function (response) {
+			    $scope.model = angular.extend($scope.model, response.Model);
 			}
 		);
 	}
@@ -61,12 +62,8 @@ coreApp.controller('EditController', function($scope, $element, httpService, $ro
 	
 	this.scope = $scope;
 	
-	this.test = function() {
-		console.log('TEST!');
-	};
-	
 	this.save = function() {
-		httpService.set('Person', $scope.model,
+	    httpService.set($scope.entity, $scope.model,
 			function(merge) {
 				$scope.model = angular.extend($scope.model, merge);
 				

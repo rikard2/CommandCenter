@@ -20,7 +20,9 @@ namespace Core.Controllers
         [HttpPost]
         public GetResultModel Get(string entity)
         {
-            var apiProc = new APIProc(string.Format("{0}_Get", entity), JsonHelper.GetArgsFromJsonRequest());
+            APIProcConnection connection = new APIProcConnection();
+
+            var apiProc = new APIProc(connection, string.Format("{0}_Get", entity), JsonHelper.GetArgsFromJsonRequest());
 
             APIProcResult apiProcResult = apiProc.ExecuteDT();
             
@@ -42,60 +44,89 @@ namespace Core.Controllers
             return new GetResultModel()
             {
                 ErrorMessage = apiProcResult.ErrorMessage,
-                Data = apiProcResult.ResultSets[0].Rows[0],
+                Model = apiProcResult.ResultSets[0].Rows[0],
                 Success = apiProcResult.IsSuccess
             };
         }
 
         [HttpPost]
-        public SetResultModel Set(string entity)
+        public FeedResultModel Feed(string entity)
         {
-            var json = JsonHelper.ObjectFromJsonRequest();
-            List<ProcArg> args = new List<ProcArg>();
+            APIProcConnection connection = new APIProcConnection();
 
-            foreach (string key in json.Keys)
-            {
-                object val = json[key];
-                if (val.ToString().Trim().Length == 0)
-                    val = null;
-
-                args.Add(new ProcArg
-                {
-                    Name = key,
-                    Value = val
-                });
-            }
-            var apiProc = new APIProc(string.Format("{0}_Set", entity), args);
+            var apiProc = new APIProc(connection, string.Format("{0}_Feed", entity), JsonHelper.GetArgsFromJsonRequest());
 
             APIProcResult apiProcResult = apiProc.ExecuteDT();
 
-            if (apiProcResult.ResultSets != null)
-            {
-                if (apiProcResult.ResultSets.Count > 0)
-                {
-                    if (apiProcResult.ResultSets[0].Rows.Count > 0)
-                    {
-                        throw new Exception("Too many resultsets!");
-                    }
-                }
-            }
-
-            var resultModel = new SetResultModel()
+            return new FeedResultModel()
             {
                 ErrorMessage = apiProcResult.ErrorMessage,
-                Success = apiProcResult.IsSuccess,
-                Merge = new Dictionary<string,object>()
+                Models = apiProcResult.ResultSets[0].Rows,
+                Success = apiProcResult.IsSuccess
             };
+        }
 
-            if (apiProcResult.IsSuccess)
+
+        [HttpPost]
+        public SetResultModel SetWithRollback(string entity)
+        {
+            return Set(entity, true);
+        }
+
+        [HttpPost]
+        public SetResultModel Set(string entity, bool rollback = false)
+        {
+            using (APIProcConnection connection = new APIProcConnection())
             {
-                foreach (var o in apiProcResult.OutputParameters)
-                {
-                    resultModel.Merge.Add(o.Key, o.Value);
-                }
-            }
+                connection.AutoRollback = rollback;
 
-            return resultModel;
+                var json = JsonHelper.ObjectFromJsonRequest();
+                List<ProcArg> args = new List<ProcArg>();
+
+                foreach (string key in json.Keys)
+                {
+                    object val = json[key];
+                    if (val.ToString().Trim().Length == 0)
+                        val = null;
+
+                    args.Add(new ProcArg
+                    {
+                        Name = key,
+                        Value = val
+                    });
+                }
+                var apiProc = new APIProc(connection, string.Format("{0}_Set", entity), args);
+
+                APIProcResult apiProcResult = apiProc.ExecuteDT();
+
+                if (apiProcResult.ResultSets != null)
+                {
+                    if (apiProcResult.ResultSets.Count > 0)
+                    {
+                        if (apiProcResult.ResultSets[0].Rows.Count > 0)
+                        {
+                            throw new Exception("Too many resultsets!");
+                        }
+                    }
+                }
+
+                var resultModel = new SetResultModel()
+                {
+                    ErrorMessage = apiProcResult.ErrorMessage,
+                    Success = apiProcResult.IsSuccess,
+                    ModelMerge = new Dictionary<string, object>()
+                };
+
+                if (apiProcResult.IsSuccess)
+                {
+                    foreach (var o in apiProcResult.OutputParameters)
+                    {
+                        resultModel.ModelMerge.Add(o.Key, o.Value);
+                    }
+                }
+
+                return resultModel;
+            }
         }
 
         [HttpPost]
@@ -130,8 +161,10 @@ namespace Core.Controllers
         [HttpPost]
         public SelectResultModel Select(string entity)
         {
+            APIProcConnection connection = new APIProcConnection();
+
             bool showInactivated = JsonHelper.GetJsonRequestValueBool("_showInactivated");
-            var apiProc = new APIProc(string.Format("{0}_Select", entity), JsonHelper.GetArgsFromJsonRequest());
+            var apiProc = new APIProc(connection, string.Format("{0}_Select", entity), JsonHelper.GetArgsFromJsonRequest());
 
             APIProcResult apiProcResult = apiProc.ExecuteDT();
 

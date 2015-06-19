@@ -19,24 +19,29 @@ namespace DataCore
         private string _schema;
         private string _name;
         private string _spName;
+        APIProcConnection _connection;
 
-        public Proc(string schema, string name, List<ProcArg> args)
+        public Proc(APIProcConnection connection, string schema, string name, List<ProcArg> args)
         {
+            _connection = connection;
             _schema = schema;
             _name = name;
             _spName = string.Format("[{0}].[{1}]", schema, name);
 
             _args = args;
             _cmd = new SqlCommand(_spName);
+            _cmd.Connection = connection.Connection;
+            _cmd.Transaction = _connection.Transaction;
             _cmd.CommandType = System.Data.CommandType.StoredProcedure;
         }
 
-        Dictionary<string, ProcParameterInfo> GetParameters(SqlConnection conn)
+        Dictionary<string, ProcParameterInfo> GetParameters()
         {
-            using (var cmd = new SqlCommand("[CORE].[GetStoredProcedureParameters]", conn))
+            using (var cmd = new SqlCommand("[CORE].[GetStoredProcedureParameters]", _connection.Connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("Name", _name);
+                cmd.Transaction = _connection.Transaction;
 
                 var parameters = new Dictionary<string, ProcParameterInfo>(StringComparer.OrdinalIgnoreCase);
                 using (var dr = cmd.ExecuteReader())
@@ -58,91 +63,90 @@ namespace DataCore
             result.ResultSets = new List<Resultset>();
             result.OutputParameters = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             
-            using (SqlConnection conn = new SqlConnection("Server=tcp:x1uxd5ig2z.database.windows.net,1433;Database=Core3017_db;User ID=Core3017@x1uxd5ig2z;Password=Tomte123;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"))
-            {
-                conn.Open();
-                _cmd.Connection = conn;
-
-                var parameters = GetParameters(conn);
+            var parameters = GetParameters();
                 
-                foreach (ProcArg arg in _args)
+            foreach (ProcArg arg in _args)
+            {
+                if (arg.Name.Substring(0, 1) == "$")
+                    continue;
+
+                if (arg.Name.Substring(0, 1) == "_" && !parameters.ContainsKey(arg.Name))
+                    continue;
+
+                SqlParameter param = _cmd.Parameters.AddWithValue(arg.Name, arg.Value ?? DBNull.Value);
+
+                if (!parameters.ContainsKey(arg.Name))
                 {
-                    if (arg.Name.Substring(0, 1) == "$")
-                        continue;
-
-                    if (arg.Name.Substring(0, 1) == "_" && !parameters.ContainsKey(arg.Name))
-                        continue;
-
-                    SqlParameter param = _cmd.Parameters.AddWithValue(arg.Name, arg.Value ?? DBNull.Value);
-
-                    bool isOutput = parameters[arg.Name].IsOutput;
-                    if (isOutput)
-                    {
-                        param.Direction = ParameterDirection.InputOutput;
-                        param.Size = -1;
-                    }
+                    throw new Exception("Parameter @" + arg.Name + " is not part of stored procedure!");
                 }
-
-                var returnParam = _cmd.Parameters.Add("ReturnValue_", 0);
-                returnParam.Direction = ParameterDirection.ReturnValue;
-
-                SqlDataReader reader = _cmd.ExecuteReader();
-
-                do
+                bool isOutput = parameters[arg.Name].IsOutput;
+                if (isOutput)
                 {
+                    param.Direction = ParameterDirection.InputOutput;
+                    param.Size = -1;
+                }
+            }
 
-                    List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+            var returnParam = _cmd.Parameters.Add("ReturnValue_", 0);
+            returnParam.Direction = ParameterDirection.ReturnValue;
 
-                    List<Column> columns = new List<Column>();
+            SqlDataReader reader = _cmd.ExecuteReader();
 
-                    // Fieldcount
-                    for (int i = 0; i < reader.FieldCount; i++)
+            do
+            {
+
+                List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+
+                List<Column> columns = new List<Column>();
+
+                // Fieldcount
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    columns.Add(new Column
                     {
-                        columns.Add(new Column
-                        {
-                            Name = reader.GetName(i),
-                            Type = reader.GetFieldType(i)
-                        });
-
-                    }
-                    
-                    while (reader.Read())
-                    {
-                        Dictionary<string, object> values = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-
-                        for (int i = 0; i < reader.FieldCount; i++)
-                        {
-                            string colName = reader.GetName(i);
-                            values.Add(colName, ProcHelpers.CleanDBValue(reader[i]));
-                        }
-
-                        rows.Add(values);
-                    }
-
-                    result.ResultSets.Add(new Resultset
-                    {
-                        Rows = rows,
-                        Columns = columns
+                        Name = reader.GetName(i),
+                        Type = reader.GetFieldType(i)
                     });
 
                 }
-                while (reader.NextResult());
-
-                //
-                foreach (SqlParameter p in _cmd.Parameters)
+                    
+                while (reader.Read())
                 {
-                    if (p.Direction == ParameterDirection.InputOutput || p.Direction == ParameterDirection.Output)
+                    Dictionary<string, object> values = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+
+                    for (int i = 0; i < reader.FieldCount; i++)
                     {
-                        object val = p.Value;
-                        result.OutputParameters.Add(p.ParameterName, ProcHelpers.CleanDBValue(p.Value));
+                        string colName = reader.GetName(i);
+                        values.Add(colName, ProcHelpers.CleanDBValue(reader[i]));
                     }
+
+                    rows.Add(values);
                 }
 
+                result.ResultSets.Add(new Resultset
+                {
+                    Rows = rows,
+                    Columns = columns
+                });
 
-                int? returnParamValue = returnParam.Value as int?;
-
-                result.ReturnValue = returnParamValue.Value;
             }
+            while (reader.NextResult());
+            reader.Close();
+
+            //
+            foreach (SqlParameter p in _cmd.Parameters)
+            {
+                if (p.Direction == ParameterDirection.InputOutput || p.Direction == ParameterDirection.Output)
+                {
+                    object val = p.Value;
+                    result.OutputParameters.Add(p.ParameterName, ProcHelpers.CleanDBValue(p.Value));
+                }
+            }
+
+
+            int? returnParamValue = returnParam.Value as int?;
+
+            result.ReturnValue = returnParamValue.Value;
 
             return result;
         }

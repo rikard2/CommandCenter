@@ -14,10 +14,12 @@ namespace DataCore
 {
     public class APIProc
     {
+        private APIProcConnection _connection;
         private Proc _proc;
 
-        public APIProc(string name, List<ProcArg> args)
+        public APIProc(APIProcConnection connection, string name, List<ProcArg> args)
         {
+            _connection = connection;
             var args2 = new List<ProcArg>();
             foreach (var procArg in args)
             {
@@ -29,7 +31,7 @@ namespace DataCore
             args2.Add(new ProcArg {Name = "_UserId", Value = 1});
             args2.Add(new ProcArg {Name = "_ErrorMessage", Value = null});
 
-            _proc = new Proc("APIDEBUG", name, args2);
+            _proc = new Proc(connection, "APIDEBUG", name, args2);
         }
 
         public APIProcResult ExecuteDT()

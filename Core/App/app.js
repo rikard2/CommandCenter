@@ -7,7 +7,7 @@ coreApp.config(['$routeProvider',
               controller: 'globalController'
           }).
           when('/TestTool', {
-              templateUrl: 'App/Views/PostTool.html',
+              templateUrl: 'App/Views/TestTool.html',
               controller: 'testToolController'
           }).
         otherwise({
@@ -34,18 +34,7 @@ coreApp.controller('debugController', function ($scope, logService)
     
 });
 
-coreApp.controller('editableTestController', function ($scope, $http) {
-    $scope.value = 123;
-    $scope.personModel = {
-        test: 132,
-        description: 'hello world'
-    };
-    $scope.selected = undefined;
-    $scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
-    console.log('states', $scope.states);
-    $scope.userModel = { };
-});
-coreApp.controller('testToolController', function ($scope, $http) {
+coreApp.controller('testToolController', function ($scope, $http, httpService) {
     
     // Any function re
 
@@ -83,19 +72,33 @@ coreApp.controller('testToolController', function ($scope, $http) {
             }
         }
 
-        console.log($scope.paramObject);
+
         $scope.hasResult = false;
-        $http.post($scope.postUrl, JSON.stringify($scope.paramObject)).
-          success(function (data, status, headers, config) {
-              $scope.hasResult = true;
-              $scope.isException = false;
-              $scope.outputJson = data;
-          }).
-          error(function (data, status, headers, config) {
-              $scope.hasResult = true;
-              $scope.isException = true;
-              $scope.outputJson = data;
-          });
+        var func = httpService.get;
+
+        if ($scope.method === 'set')
+            func = httpService.set;
+
+        if ($scope.method === 'feed')
+            func = httpService.feed;
+
+        func($scope.entity, $scope.paramObject,
+            function (response) { // success
+                $scope.success = true;
+                console.log('success', response);
+                $scope.hasResult = true;
+                $scope.isException = false;
+                $scope.outputJson = response;
+            },
+            function (response) { // fail
+                console.log('fail', response);
+                $scope.success = false;
+                $scope.hasResult = true;
+                $scope.isException = true;
+                $scope.outputJson = response.data;
+            },
+            $scope.rollback
+        );
     }
 });
 

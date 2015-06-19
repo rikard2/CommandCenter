@@ -1,0 +1,83 @@
+﻿<div class="box ng-scope">
+    <div>
+        <div class="heading primary">
+            Testa anrop
+        </div>
+        <div class="content">
+            <table>
+                <tr>
+                    <td width="100">Method:</td>
+                    <td>
+                        <select ng-model="method">
+                            <option value="get">Get</option>
+                            <option value="set">Set</option>
+                            <option value="feed">Feed</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-top:5px;" width="100">Entity:</td>
+                    <td style="padding-top:5px;">
+                        <input type="text" size="20" ng-model="entity" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-top:5px;" width="100">Rollback:</td>
+                    <td style="padding-top:5px;">
+                        <input type="checkbox" ng-model="rollback" ng-init="rollback = true" />
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            Parameters:<br/>
+            <table>
+                <tr ng-repeat="p in params">
+                    <td>@ <input empty-to-null type="text" ng-model="p.name" /></td>
+                    <td style="padding-left:10px;"><input empty-to-null type="text" ng-model="p.value" /></td>
+                    <td style="padding-left:10px;">
+                        <button class="btn btn-default" ng-click="params.splice($index, 1)"><span class="glyphicon glyphicon-minus" style="cursor:pointer;" style="font-size:{{sizePixels}}px"></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="50" style="padding-top:10px;">
+                        <button class="btn btn-default" ng-click="newRow()"><span class="glyphicon glyphicon-plus" style="cursor:pointer;" style="font-size:{{sizePixels}}px"></button>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            <button class="btn btn-success" ng-click="doPost()">Post!</button>
+        </div>
+    </div>
+</div>
+<div class="box ng-scope">
+    <div>
+        <div class="heading primary">
+            Parameterar
+        </div>
+        <div class="content">
+            <pre>{{ params | json }}</pre>
+        </div>
+    </div>
+</div>
+
+<div class="box ng-scope" ng-if="hasResult">
+    <div>
+        <div class="heading primary">
+            Resultat
+        </div>
+        <div class="content" ng-if="isException">
+            <div class="alert alert-danger">
+                {{ outputJson.ExceptionMessage }}
+            </div>
+            <strong>ExceptionType:</strong>: {{ outputJson.ExceptionType }}<br />
+            <strong>StackTrace:</strong>: {{ outputJson.StackTrace }}
+        </div>
+
+        <div class="content" ng-if="!isException && outputJson">
+            <div class="alert" ng-class="outputJson.Success ? 'alert-success' : 'alert-danger'">
+                Success: <strong>{{ success ? 'true' : 'false' }}</strong>
+            </div>
+            <pre>{{ outputJson | json }}</pre>
+        </div>
+    </div>
+</div>
